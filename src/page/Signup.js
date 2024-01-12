@@ -3,6 +3,7 @@ import loginSignupImage from "../assest/login..gif";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import { ImagetoBase64 } from "../utility/imagetoBase64";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const Signup = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    image: "",
   });
 
   console.log(data);
@@ -37,9 +39,17 @@ const Signup = () => {
     });
   };
 
-  // const handleUpLoadProfileImage = (e) => {
-  //   console.log(e.target.files[0]);
-  // };
+  const handleUpLoadProfileImage = async (e) => {
+    const data = await ImagetoBase64(e.target.files[0]);
+    console.log(data);
+
+    setData((prev) => {
+      return {
+        ...prev,
+        image: data,
+      };
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault(); //page is not be refreshed of this
@@ -62,11 +72,14 @@ const Signup = () => {
     <div className="p-3 md:p-4">
       <div className="w-full max-w-sm bg-white m-auto flex items-center flex-col p-4">
         {/* <h1>Sign up</h1> */}
-        <div className="w-20 overflow-hidden rounded-full drop-shadow-md shadow-md m-auto relative ">
-          <img src={loginSignupImage} className="w-15" />
+        <div className="w-20 h-20 overflow-hidden rounded-full drop-shadow-md shadow-md m-auto relative ">
+          <img
+            src={data.image ? data.image : loginSignupImage}
+            className="w-full h-full"
+          />
 
-          {/* <label htmlFor="profileImage">
-            <div className="absolute bottom-0 h-1/3 bg-slate-400 w-full text-center cursor-pointer">
+          <label htmlFor="profileImage">
+            <div className="absolute bottom-0 h-1/3 bg-slate-400 bg-opacity-50 w-full text-center cursor-pointer">
               <p className="text-sm p-1 text-white">Upload</p>
             </div>
             <input
@@ -76,7 +89,7 @@ const Signup = () => {
               className="hidden"
               onChange={handleUpLoadProfileImage}
             />
-          </label> */}
+          </label>
         </div>
 
         <form className="w-full py-3 flex flex-col" onSubmit={handleSubmit}>

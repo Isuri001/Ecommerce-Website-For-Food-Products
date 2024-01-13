@@ -4,6 +4,7 @@ import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { ImagetoBase64 } from "../utility/imagetoBase64";
+import { toast } from "react-hot-toast";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -72,8 +73,11 @@ const Signup = () => {
 
         const dataRes = await fetchData.json();
         console.log(dataRes);
-        alert("Successfull");
-        // navigate("/login");
+        // alert(dataRes.message);
+        toast(dataRes.message);
+        if (dataRes.alert) {
+          navigate("/login");
+        }
       } else {
         alert("Password and confirm password not equal");
       }

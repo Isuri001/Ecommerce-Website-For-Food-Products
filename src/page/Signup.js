@@ -60,6 +60,7 @@ const Signup = () => {
     const { firstName, email, password, confirmPassword } = data;
     if (firstName && email && password && confirmPassword) {
       if (password === confirmPassword) {
+        console.log(data);
         const fetchData = await fetch(
           `${process.env.REACT_APP_SERVER_DOMAIN}/signup`,
           {

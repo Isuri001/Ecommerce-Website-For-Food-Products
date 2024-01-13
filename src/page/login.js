@@ -3,6 +3,10 @@ import loginSignupImage from "../assest/login..gif";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginRedux } from "../redux/userSlice";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,7 +16,11 @@ const Login = () => {
     password: "",
   });
 
-  console.log(data);
+  const navigate = useNavigate();
+
+  const userData = useSelector((state) => state);
+
+  const dispatch = useDispatch();
 
   const handleShowPassword = () => {
     setShowPassword((prev) => !prev);
@@ -28,13 +36,36 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault(); //page is not be refreshed of this
 
     //check the password and confirmpassord are equal or not
     const { email, password } = data;
     if (email && password) {
-      alert("Successfull");
+      const fetchData = await fetch(
+        `${process.env.REACT_APP_SERVER_DOMAIN}/login`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      const dataRes = await fetchData.json();
+      console.log(dataRes);
+
+      toast(dataRes.message);
+
+      if (dataRes.alert) {
+        dispatch(loginRedux(dataRes));
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+
+      console.log(userData);
     } else {
       alert("Please enter required fields");
     }

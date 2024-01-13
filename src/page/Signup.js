@@ -51,15 +51,29 @@ const Signup = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  console.log(process.env.REACT_APP_SERVER_DOMAIN);
+  const handleSubmit = async (e) => {
     e.preventDefault(); //page is not be refreshed of this
 
     //check the password and confirmpassord are equal or not
     const { firstName, email, password, confirmPassword } = data;
     if (firstName && email && password && confirmPassword) {
       if (password === confirmPassword) {
+        const fetchData = await fetch(
+          `${process.env.REACT_APP_SERVER_DOMAIN}/signup`,
+          {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
+
+        const dataRes = await fetchData.json();
+        console.log(dataRes);
         alert("Successfull");
-        navigate("/login");
+        // navigate("/login");
       } else {
         alert("Password and confirm password not equal");
       }

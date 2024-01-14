@@ -2,6 +2,7 @@ import React from "react";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { ImagetoBase64 } from "../utility/imagetoBase64";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 const Newproduct = () => {
   const [data, setData] = useState({
@@ -34,9 +35,41 @@ const Newproduct = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(data);
+
+    const { name, image, category, price } = data;
+
+    if (name && image && category && price) {
+      const fetchData = await fetch(
+        `${process.env.REACT_APP_SERVER_DOMAIN}/uploadProduct`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      const fetchRes = await fetchData.json();
+
+      console.log(fetchRes);
+      toast(fetchRes.message);
+
+      setData(() => {
+        return {
+          name: "",
+          category: "",
+          image: "",
+          price: "",
+          description: "",
+        };
+      });
+    } else {
+      toast("Enter Require Fields");
+    }
   };
 
   return (
@@ -53,6 +86,7 @@ const Newproduct = () => {
           name="name"
           className="bg-slate-100 p-1 my-1"
           onChange={handleOnChange}
+          value={data.name}
         />
 
         <label htmlFor="category" className="font-serif">
@@ -63,12 +97,18 @@ const Newproduct = () => {
           id="category"
           name="category"
           onChange={handleOnChange}
+          value={data.category}
         >
-          <option>Fruits</option>
-          <option>Vegetables</option>
-          <option>Pizza</option>
-          <option>Snacks</option>
-          <option>IceCream</option>
+          <option value={"other"}>Select Category</option>
+          <option value={"fruits"}>Fruits</option>
+          <option value={"vegetables"}>Vegetables</option>
+          <option value={"pizza"}>Pizza</option>
+          <option value={"snacks"}>Snacks</option>
+          <option value={"icecream"}>IceCream</option>
+          <option value={"burgers"}>Burgers</option>
+          <option value={"cooldrinks"}>Cool Drinks</option>
+          <option value={"pastry"}>Pastry</option>
+          <option value={"cake"}>Cake</option>
         </select>
 
         <label htmlFor="image" className="my-1 font-serif ">
@@ -100,6 +140,7 @@ const Newproduct = () => {
           className="bg-slate-100 p-1 my-1"
           onChange={handleOnChange}
           name="price"
+          value={data.price}
         ></input>
 
         <label htmlFor="description" className="my-1 font-serif">
@@ -110,6 +151,7 @@ const Newproduct = () => {
           className="bg-slate-100 p-1 my-1 resize-none"
           onChange={handleOnChange}
           name="description"
+          value={data.description}
         ></textarea>
 
         <button className="bg-blue-400 hover:bg-blue-500 p-1 my-1 font-bold drop-shadow font-medium">

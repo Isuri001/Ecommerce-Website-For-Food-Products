@@ -1,9 +1,11 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import HomeCart from "../component/HomeCard";
 import HomeCard from "../component/HomeCard";
 import { useSelector } from "react-redux";
 import CardFeature from "../component/CardFeature";
 import { GrNext, GrPrevious } from "react-icons/gr";
+import { ImSpoonKnife } from "react-icons/im";
+import FilterProduct from "../component/FilterProduct";
 
 const Home = () => {
   const productData = useSelector((state) => state.product.productList);
@@ -25,6 +27,25 @@ const Home = () => {
     slideProductRef.current.scrollLeft -= 200;
   };
 
+  const categoryList = [...new Set(productData.map((el) => el.category))];
+  console.log(categoryList);
+
+  //Filter data display
+  const [filterby, setFilterBy] = useState("");
+  const [dataFilter, setDataFilter] = useState([]);
+
+  useEffect(() => {
+    setDataFilter(productData);
+  }, [productData]);
+
+  const handleFilterProduct = (category) => {
+    const filter = productData.filter(
+      (el) => el.category.toLowerCase() === category.toLowerCase()
+    );
+    setDataFilter(() => {
+      return [...filter];
+    });
+  };
   return (
     <div className="p-2 md:p-4">
       <div className="md:flex gap-3 py-0">
@@ -38,17 +59,17 @@ const Home = () => {
           </div>
           <h2 className="text-4xl py-4 md:text-7xl font-bold">
             The Fasted Delivery in{" "}
-            <span className="text-green-900">Your Home</span>
+            <span className="text-emerald-900">Your Home</span>
           </h2>
           <p className="py-5 text-base">
             Welcome to{" "}
-            <span className="font-medium text-green-500">Food Franzy </span> !
+            <span className="font-medium text-emerald-500">Food Franzy </span> !
             Discover a world where passion meets flavor, and quality meets
             convenience. Our e-commerce platform is crafted for food enthusiasts
             like you. Start a unique gastronomic journey with our handpicked
             delights, guaranteed to elevate your dining experience.
           </p>
-          <button className="font-bold bg-green-400 text-slate-200 px-6 py-3 rounded-md">
+          <button className="font-bold bg-emerald-400 text-slate-200 px-6 py-3 rounded-md">
             Order Now
           </button>
         </div>
@@ -108,6 +129,36 @@ const Home = () => {
             />
           );
         })}
+      </div>
+
+      <div className="my-5">
+        <h2 className="font-bold text-2xl text-slate-800 mb-4">Your Product</h2>
+
+        <div className=" flex gap-4 justify-center overflow-scroll scrollbar-none">
+          {categoryList[0] &&
+            categoryList.map((el) => {
+              return (
+                <FilterProduct
+                  category={el}
+                  onClick={() => handleFilterProduct(el)}
+                />
+              );
+            })}
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-6 my-4">
+          {dataFilter.map((el) => {
+            return (
+              <CardFeature
+                key={el._id}
+                image={el.image}
+                name={el.name}
+                category={el.category}
+                price={el.price}
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );

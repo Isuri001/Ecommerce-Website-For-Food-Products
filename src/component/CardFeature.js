@@ -1,7 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { addCartItem } from "../redux/productSlice";
+import { useDispatch } from "react-redux";
 
 const CardFeature = ({ image, name, price, category, id }) => {
+  const dispatch = useDispatch();
+  const handleAddCartProduct = (e) => {
+    dispatch(
+      addCartItem({
+        _id: id,
+        name: name,
+        price: price,
+        category: category,
+        image: image,
+      })
+    );
+    alert("hii");
+  };
+
   return (
     <div className="w-full min-w-[200px] max-w-[200px] bg-white cursor-pointer hover:drop-shadow-lg py-5 px-4 rounded flex flex-col">
       <Link
@@ -19,10 +35,13 @@ const CardFeature = ({ image, name, price, category, id }) => {
           <span className="text-red-500 font-semibold">Rs.</span>
           <span className="font-semibold">{price}</span>
         </p>
-        <button className="bg-emerald-300 rounded py-1 my-4 hover:bg-emerald-400 w-full">
-          Add to cart
-        </button>
       </Link>
+      <button
+        className="bg-emerald-300 rounded py-1 my-4 hover:bg-emerald-400 w-full"
+        onClick={handleAddCartProduct}
+      >
+        Add to cart
+      </button>
     </div>
   );
 };

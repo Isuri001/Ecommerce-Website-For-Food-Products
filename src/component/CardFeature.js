@@ -15,7 +15,6 @@ const CardFeature = ({ image, name, price, category, id }) => {
         image: image,
       })
     );
-    alert("hii");
   };
 
   return (

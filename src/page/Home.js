@@ -6,6 +6,7 @@ import CardFeature from "../component/CardFeature";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { ImSpoonKnife } from "react-icons/im";
 import FilterProduct from "../component/FilterProduct";
+import AllProduct from "../component/AllProduct";
 
 const Home = () => {
   const productData = useSelector((state) => state.product.productList);
@@ -27,25 +28,6 @@ const Home = () => {
     slideProductRef.current.scrollLeft -= 200;
   };
 
-  const categoryList = [...new Set(productData.map((el) => el.category))];
-  console.log(categoryList);
-
-  //Filter data display
-  const [filterby, setFilterBy] = useState("");
-  const [dataFilter, setDataFilter] = useState([]);
-
-  useEffect(() => {
-    setDataFilter(productData);
-  }, [productData]);
-
-  const handleFilterProduct = (category) => {
-    const filter = productData.filter(
-      (el) => el.category.toLowerCase() === category.toLowerCase()
-    );
-    setDataFilter(() => {
-      return [...filter];
-    });
-  };
   return (
     <div className="p-2 md:p-4">
       <div className="md:flex gap-3 py-0">
@@ -122,6 +104,7 @@ const Home = () => {
           return (
             <CardFeature
               key={el._id}
+              id={el._id}
               name={el.name}
               category={el.category}
               price={el.price}
@@ -131,35 +114,7 @@ const Home = () => {
         })}
       </div>
 
-      <div className="my-5">
-        <h2 className="font-bold text-2xl text-slate-800 mb-4">Your Product</h2>
-
-        <div className=" flex gap-4 justify-center overflow-scroll scrollbar-none">
-          {categoryList[0] &&
-            categoryList.map((el) => {
-              return (
-                <FilterProduct
-                  category={el}
-                  onClick={() => handleFilterProduct(el)}
-                />
-              );
-            })}
-        </div>
-
-        <div className="flex flex-wrap justify-center gap-6 my-4">
-          {dataFilter.map((el) => {
-            return (
-              <CardFeature
-                key={el._id}
-                image={el.image}
-                name={el.name}
-                category={el.category}
-                price={el.price}
-              />
-            );
-          })}
-        </div>
-      </div>
+      <AllProduct heading={"Your Product"} />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { addCartItem } from "../redux/productSlice";
+import { addCartItem, increaseQty } from "../redux/productSlice";
 import { useDispatch } from "react-redux";
 
 const CardFeature = ({ image, name, price, category, id }) => {

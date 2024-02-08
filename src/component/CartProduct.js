@@ -3,7 +3,11 @@ import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { deleteCartItem } from "../redux/productSlice";
+import {
+  deleteCartItem,
+  increaseQty,
+  decreaseQty,
+} from "../redux/productSlice";
 
 const CartProduct = ({ id, name, image, category, qty, total, price }) => {
   const dispatch = useDispatch();
@@ -31,12 +35,15 @@ const CartProduct = ({ id, name, image, category, qty, total, price }) => {
         </p>
         <div className="flex justify-between ">
           <div className="flex gap-3 items-center">
-            <button className="bg-slate-300 rounded py-1 my-4 hover:bg-slate-400 p-1">
+            <button
+              onClick={() => dispatch(increaseQty(id))}
+              className="bg-slate-300 rounded py-1 my-4 hover:bg-slate-400 p-1"
+            >
               <FaPlus />
             </button>
             <p className="font-semibold p-1">{qty}</p>
             <button
-              onClick={""}
+              onClick={() => dispatch(decreaseQty(id))}
               className="bg-slate-300 rounded py-1 my-4 hover:bg-slate-400 p-1 "
             >
               <FaMinus />

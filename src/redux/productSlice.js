@@ -14,22 +14,35 @@ export const productSlice = createSlice({
       state.productList = [...action.payload];
     },
     addCartItem: (state, action) => {
-      console.log(action);
-      const total = action.payload.price;
-      state.cartItem = [
-        ...state.cartItem,
-        { ...action.payload, qty: 1, total: total },
-      ];
+      const check = state.cartItem.some((el) => el._id === action.payload._id);
+      if (check) {
+        toast("Already item in cart");
+      } else {
+        toast("Item Added to the cart");
+        const total = action.payload.price;
+        state.cartItem = [
+          ...state.cartItem,
+          { ...action.payload, qty: 1, total: total },
+        ];
+      }
     },
     deleteCartItem: (state, action) => {
-      console.log(action.payload);
       toast("One Item Deleted");
       const index = state.cartItem.findIndex((el) => el._id === action.payload);
       state.cartItem.splice(index, 1);
-      console.log(index);
     },
-    increaseQty: (state, action) => {},
-    decreaseQty: (state, action) => {},
+    increaseQty: (state, action) => {
+      const index = state.cartItem.findIndex((el) => el._id === action.payload);
+      let qty = state.cartItem[index].qty;
+      state.cartItem[index].qty = ++qty;
+    },
+    decreaseQty: (state, action) => {
+      const index = state.cartItem.findIndex((el) => el._id === action.payload);
+      let qty = state.cartItem[index].qty;
+      if (qty > 1) {
+        state.cartItem[index].qty = --qty;
+      }
+    },
   },
 });
 

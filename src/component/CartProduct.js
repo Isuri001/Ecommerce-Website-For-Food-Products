@@ -51,7 +51,10 @@ const CartProduct = ({ id, name, image, category, qty, total, price }) => {
           </div>
           <div className="flex items-center gap-2 font-bold text-slate-700">
             <p>Total :</p>
-            <p>{total}</p>
+            <p>
+              <span className="text-red-500 font-semibold">Rs.</span>
+              {total}
+            </p>
           </div>
         </div>
       </div>

@@ -46,7 +46,13 @@ export const productSlice = createSlice({
       const index = state.cartItem.findIndex((el) => el._id === action.payload);
       let qty = state.cartItem[index].qty;
       if (qty > 1) {
-        state.cartItem[index].qty = --qty;
+        const qtyDec = --qty;
+        state.cartItem[index].qty = qtyDec;
+
+        const price = state.cartItem[index].price;
+        const total = price * qtyDec;
+
+        state.cartItem[index].total = total;
       }
     },
   },

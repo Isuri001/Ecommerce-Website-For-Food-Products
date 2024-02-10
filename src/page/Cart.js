@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import CartProduct from "../component/CartProduct";
 import emptyCartImage from "../assest/empty-cart-1.png";
+import { useNavigate } from "react-router-dom";
+import Success from "./Success";
 
 const Cart = () => {
   const productCartItem = useSelector((state) => state.product.cartItem);
@@ -16,6 +18,17 @@ const Cart = () => {
     (acc, curr) => acc + parseInt(curr.qty),
     0
   );
+
+  const navigate = useNavigate();
+  const [redirect, setRedirect] = useState(false);
+
+  const handleReset = () => {
+    setRedirect(true);
+  };
+
+  if (redirect) {
+    navigate("../Success");
+  }
 
   return (
     <>
@@ -57,7 +70,10 @@ const Cart = () => {
                   {totalprice}
                 </p>
               </div>
-              <button className="bg-red-500 w-full text-lg font-bold py-2 text-white">
+              <button
+                onClick={handleReset}
+                className="bg-red-500 w-full text-lg font-bold py-2 text-white"
+              >
                 Payment
               </button>
             </div>
